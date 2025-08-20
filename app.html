@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Diagnóstico estratégico completo para consultórios e clínicas odontológicas">
+    <meta name="keywords" content="consultório, clínica, gestão, diagnóstico, mentoria">
+    <meta name="author" content="Mentoria ACME">
+    <title>Sessão Estratégica - Diagnóstico do Seu Consultório</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 20px;
+            position: relative;
+        }
+        
+        /* Container para logo */
+        .logo-container {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .logo {
+            max-width: 200px;
+            height: auto;
+            filter: brightness(0) invert(1); /* Torna logos escuras em brancas */
+        }
+        
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            color: #ffffff;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            font-weight: 700;
+        }
+        
+        .header h2 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.4rem;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+        
+        .progress-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .progress-text {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #333333, #ffffff);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+        
+        .quiz-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .question-card {
+            background: rgba(255, 255, 255, 0.98);
+            color: #333;
+            border-radius: 12px;
+            padding: 35px 25px;
+            text-align: center;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transform: translateY(0);
+            transition: all 0.5s ease;
+            margin: 0 10px;
+        }
+        
+        .question-card.fade-out {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        
+        .question-card.fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .topic-indicator {
+            background: #000000;
+            color: #ffffff;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .question-number {
+            color: #666666;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .question-text {
+            font-size: 1.3rem;
+            color: #333;
+            margin-bottom: 30px;
+            line-height: 1.5;
+            font-weight: 500;
+            padding: 0 10px;
+        }
+        
+        .rating-container {
+            margin: 25px 0;
+        }
+        
+        .rating-scale {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin: 20px auto;
+            max-width: 320px;
+            padding: 0 10px;
+        }
+        
+        .rating-scale input[type="radio"] {
+            display: none;
+        }
+        
+        .rating-scale label {
+            width: 100%;
+            height: 45px;
+            border-radius: 6px;
+            border: 2px solid #333333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+            background: #fff;
+            color: #333333;
+            min-width: 40px;
+        }
+        
+        .rating-scale label:hover {
+            border-color: #000000;
+            background: #f8f8f8;
+            transform: scale(1.05);
+        }
+        
+        .rating-scale input[type="radio"]:checked + label {
+            background: #000000;
+            border-color: #000000;
+            color: #ffffff;
+            transform: scale(1.1);
+        }
+        
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #666666;
+            margin-top: 15px;
+            padding: 0 15px;
+            font-weight: 500;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 20px;
+            padding: 0 10px;
+        }
+        
+        .btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            flex: 1;
+            max-width: 160px;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #333333;
+            border: 2px solid #333333;
+        }
+        
+        .btn-secondary:hover {
+            background: #333333;
+            color: #fff;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #333333, #000000);
+            color: #fff;
+            border: 2px solid #333333;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .results {
+            display: none;
+        }
+        
+        .results-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .results h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            color: #ffffff;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        .score-summary {
+            background: rgba(255, 255, 255, 0.98);
+            color: #333;
+            border-radius: 12px;
+            padding: 35px;
+            margin-bottom: 40px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .total-score {
+            font-family: 'Inter', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 15px;
+        }
+        
+        .score-level {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.6rem;
+            color: #333333;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .score-message {
+            font-size: 1.15rem;
+            color: #555555;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+        
+        .chart-container {
+            max-width: 750px;
+            margin: 40px auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 12px;
+            padding: 40px 35px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: visible;
+        }
+        
+        .detailed-results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .result-item {
+            background: rgba(255, 255, 255, 0.98);
+            color: #333;
+            border-radius: 12px;
+            padding: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+        
+        .result-title {
+            color: #000000;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .result-score {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333333;
+        }
+        
+        .result-bar {
+            width: 100%;
+            height: 12px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .result-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.8s ease;
+            background: linear-gradient(90deg, #666666, #000000);
+        }
+        
+        .result-gap {
+            font-size: 0.95rem;
+            color: #555555;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .result-feedback {
+            background: rgba(0, 0, 0, 0.05);
+            border-left: 4px solid #333333;
+            padding: 18px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #333333;
+        }
+        
+        .result-feedback.excellent {
+            border-left-color: #28a745;
+            background: rgba(40, 167, 69, 0.08);
+        }
+        
+        .result-feedback.good {
+            border-left-color: #333333;
+            background: rgba(51, 51, 51, 0.08);
+        }
+        
+        .result-feedback.improvement {
+            border-left-color: #ffc107;
+            background: rgba(255, 193, 7, 0.08);
+        }
+        
+        .result-feedback.urgent {
+            border-left-color: #dc3545;
+            background: rgba(220, 53, 69, 0.08);
+        }
+        
+        .cta-section {
+            background: linear-gradient(45deg, #333333, #000000);
+            color: #fff;
+            border-radius: 12px;
+            padding: 45px;
+            margin-top: 50px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+        
+        .cta-section h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        
+        .cta-section p {
+            font-size: 1.25rem;
+            margin-bottom: 35px;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            align-items: center;
+            margin-top: 35px;
+        }
+        
+        .btn-cta {
+            background: #ffffff;
+            color: #000000;
+            border: 3px solid #ffffff;
+            padding: 20px 45px;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            width: 100%;
+            max-width: 520px;
+        }
+        
+        .btn-cta:hover {
+            background: transparent;
+            color: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-cta-secondary {
+            background: transparent;
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            padding: 16px 40px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            width: 100%;
+            max-width: 520px;
+        }
+        
+        .btn-cta-secondary:hover {
+            background: #ffffff;
+            color: #000000;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header {
+                padding: 25px 15px;
+                margin-bottom: 25px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+                margin-bottom: 15px;
+            }
+            
+            .header h2 {
+                font-size: 1.15rem;
+                margin-bottom: 20px;
+            }
+            
+            .logo {
+                max-width: 150px;
+            }
+            
+            .progress-section {
+                padding: 20px;
+                margin-bottom: 25px;
+            }
+            
+            .progress-text {
+                font-size: 0.85rem;
+            }
+            
+            .question-card {
+                padding: 25px 18px;
+                margin: 0 5px;
+            }
+            
+            .question-text {
+                font-size: 1.15rem;
+                margin-bottom: 25px;
+                padding: 0 8px;
+            }
+            
+            .topic-indicator {
+                font-size: 0.75rem;
+                padding: 6px 15px;
+                margin-bottom: 15px;
+            }
+            
+            .question-number {
+                font-size: 0.8rem;
+                margin-bottom: 12px;
+            }
+            
+            .rating-scale {
+                grid-template-columns: repeat(6, 1fr);
+                gap: 8px;
+                max-width: 290px;
+                padding: 0 8px;
+            }
+            
+            .rating-scale label {
+                height: 38px;
+                font-size: 0.9rem;
+                min-width: 35px;
+                border-width: 2px;
+            }
+            
+            .scale-labels {
+                font-size: 0.75rem;
+                padding: 0 12px;
+                margin-top: 12px;
+            }
+            
+            .navigation-buttons {
+                margin-top: 25px;
+                gap: 12px;
+                padding: 0 8px;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                font-size: 0.85rem;
+                letter-spacing: 0.5px;
+            }
+            
+            .total-score {
+                font-size: 3rem;
+            }
+            
+            .chart-container {
+                padding: 30px 25px;
+                max-width: 100%;
+                margin: 30px auto;
+            }
+            
+            .detailed-results {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .result-item {
+                padding: 25px 20px;
+            }
+            
+            .result-feedback {
+                padding: 15px;
+                font-size: 0.9rem;
+            }
+            
+            .cta-section {
+                padding: 35px 25px;
+            }
+            
+            .cta-section h3 {
+                font-size: 1.8rem;
+                margin-bottom: 20px;
+            }
+            
+            .cta-section p {
+                font-size: 1.1rem;
+                margin-bottom: 30px;
+            }
+            
+            .cta-buttons {
+                gap: 15px;
+            }
+            
+            .btn-cta {
+                padding: 18px 35px;
+                font-size: 1.1rem;
+                letter-spacing: 0.8px;
+            }
+            
+            .btn-cta-secondary {
+                padding: 15px 30px;
+                font-size: 0.95rem;
+                letter-spacing: 0.5px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 12px;
+            }
+            
+            .header h1 {
+                font-size: 1.7rem;
+            }
+            
+            .header h2 {
+                font-size: 1rem;
+            }
+            
+            .logo {
+                max-width: 130px;
+            }
+            
+            .question-card {
+                padding: 20px 15px;
+            }
+            
+            .question-text {
+                font-size: 1.05rem;
+            }
+            
+            .rating-scale {
+                max-width: 260px;
+                gap: 6px;
+            }
+            
+            .rating-scale label {
+                height: 35px;
+                font-size: 0.85rem;
+                min-width: 32px;
+            }
+            
+            .scale-labels {
+                font-size: 0.7rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.8rem;
+            }
+            
+            .chart-container {
+                padding: 25px 15px;
+                margin: 25px auto;
+            }
+            
+            .detailed-results {
+                gap: 20px;
+            }
+            
+            .result-feedback {
+                padding: 12px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <!-- Container para sua logo -->
+            <div class="logo-container">
+                <!-- Substitua o src abaixo pelo caminho da sua logo -->
+                <img src="logo.png" alt="Logo da Empresa" class="logo" style="display: none;">
+                <!-- Para usar: remova style="display: none;" e adicione o caminho correto -->
+            </div>
+            
+            <h1>Sessão Estratégica</h1>
+            <h2>Diagnóstico Completo para Consultórios e Clínicas Odontológicas</h2>
+        </div>
+        
+        <div class="progress-section">
+            <div class="progress-info">
+                <span class="progress-text">Pergunta <span id="currentQuestion">1</span> de 20</span>
+                <span class="progress-text"><span id="progressPercent">5%</span> concluído</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+        
+        <div class="quiz-section" id="quizSection">
+            <div class="question-card" id="questionCard">
+                <div class="topic-indicator" id="topicIndicator">Finanças</div>
+                <div class="question-number" id="questionNumber">Pergunta 1/20</div>
+                <div class="question-text" id="questionText">
+                    Seu consultório consegue se manter por pelo menos 3 meses sem novos atendimentos?
+                </div>
+                
+                <div class="rating-container">
+                    <div class="rating-scale">
+                        <input type="radio" name="currentAnswer" value="0" id="answer0">
+                        <label for="answer0">0</label>
+                        <input type="radio" name="currentAnswer" value="1" id="answer1">
+                        <label for="answer1">1</label>
+                        <input type="radio" name="currentAnswer" value="2" id="answer2">
+                        <label for="answer2">2</label>
+                        <input type="radio" name="currentAnswer" value="3" id="answer3">
+                        <label for="answer3">3</label>
+                        <input type="radio" name="currentAnswer" value="4" id="answer4">
+                        <label for="answer4">4</label>
+                        <input type="radio" name="currentAnswer" value="5" id="answer5">
+                        <label for="answer5">5</label>
+                        <input type="radio" name="currentAnswer" value="6" id="answer6">
+                        <label for="answer6">6</label>
+                        <input type="radio" name="currentAnswer" value="7" id="answer7">
+                        <label for="answer7">7</label>
+                        <input type="radio" name="currentAnswer" value="8" id="answer8">
+                        <label for="answer8">8</label>
+                        <input type="radio" name="currentAnswer" value="9" id="answer9">
+                        <label for="answer9">9</label>
+                        <input type="radio" name="currentAnswer" value="10" id="answer10">
+                        <label for="answer10">10</label>
+                    </div>
+                    <div class="scale-labels">
+                        <span>Não consegue se manter</span>
+                        <span>Consegue totalmente</span>
+                    </div>
+                </div>
+                
+                <div class="navigation-buttons">
+                    <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" style="visibility: hidden;">Anterior</button>
+                    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Próxima</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="results" class="results">
+            <div class="results-header">
+                <h2>Diagnóstico Estratégico Completo</h2>
+                <div class="score-summary">
+                    <div class="total-score" id="totalScore">0%</div>
+                    <div class="score-level" id="scoreLevel">Calculando...</div>
+                    <div class="score-message" id="scoreMessage"></div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="radarChart" width="400" height="400"></canvas>
+            </div>
+            
+            <div class="detailed-results" id="detailedResults">
+                <!-- Results will be populated here -->
+            </div>
+            
+            <div class="cta-section">
+                <h3>Pronto para a Transformação?</h3>
+                <p>Seu diagnóstico revela exatamente onde a <strong>Mentoria ACME</strong> pode transformar seu consultório. Nossa metodologia comprovada vai estruturar todas essas áreas e multiplicar seus resultados.</p>
+                
+                <div class="cta-buttons">
+                    <a href="#" class="btn-cta">Quero Conhecer a Mentoria ACME</a>
+                    
+                    <a href="#" class="btn-cta-secondary">Falar com um Especialista</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const topics = [
+            {
+                name: 'financas',
+                label: 'Finanças',
+                color: '#333333',
+                questions: [
+                    {
+                        text: 'Seu consultório consegue se manter por pelo menos 3 meses sem novos atendimentos?',
+                        labels: ['Não consegue se manter', 'Consegue totalmente']
+                    },
+                    {
+                        text: 'O quanto seu financeiro do consultório/clínica é separado das suas contas pessoais?',
+                        labels: ['Tudo misturado', 'Totalmente separado']
+                    },
+                    {
+                        text: 'O quanto você sabe da margem de lucro de cada procedimento?',
+                        labels: ['Não faço ideia', 'Sei totalmente']
+                    },
+                    {
+                        text: 'De 0 a 10, o quanto você tem segurança de que a divisão feita com seus dentistas parceiros é justa e financeiramente sustentável para o consultório?',
+                        labels: ['Nenhuma segurança', 'Total segurança']
+                    },
+                    {
+                        text: 'Quanto você tem de previsibilidade de faturamento para os próximos meses?',
+                        labels: ['Não tenho previsibilidade', 'Tenho bastante previsibilidade']
+                    }
+                ]
+            },
+            {
+                name: 'equipe',
+                label: 'Equipe',
+                color: '#000000',
+                questions: [
+                    {
+                        text: 'De 0 a 10, quanto existe uma rotina de atividades diárias, semanais e mensais estruturadas para sua secretária, auxiliares e demais equipe?',
+                        labels: ['0', '10']
+                    },
+                    {
+                        text: 'Você se sente segura(o) o bastante em delegar tarefas sem precisar supervisionar o tempo todo?',
+                        labels: ['Pouco segura(o)', 'Totalmente segura(o)']
+                    },
+                    {
+                        text: 'O quanto sua equipe está muito motivada e comprometida com as metas e os resultados do consultório/clínica?',
+                        labels: ['Pouco motivada', 'Extremamente motivada']
+                    },
+                    {
+                        text: 'De 0 a 10, o quanto sua equipe traz ideias e estratégias sem que você solicite?',
+                        labels: ['0', '10']
+                    },
+                    {
+                        text: 'De 0 a 10, o quanto sente que é mais fácil fazer sozinho do que tentar explicar e acompanhar sua equipe?',
+                        labels: ['0', '10']
+                    }
+                ]
+            },
+            {
+                name: 'processos',
+                label: 'Processos e Fidelização',
+                color: '#333333',
+                questions: [
+                    {
+                        text: 'Em caso de falta ou troca de colaborador, o quanto existe um passo a passo claro pra treinar alguém novo, de forma rápida?',
+                        labels: ['Nenhum passo a passo', 'Passo a passo claro e assertivo']
+                    },
+                    {
+                        text: 'O quanto você se sente segura(o) de deixar a clínica e viajar por duas ou mais semanas?',
+                        labels: ['Pouco segura(o)', 'Extremamente segura(o)']
+                    },
+                    {
+                        text: 'Quanto de controle você e sua equipe têm para recuperar intencionalmente os pacientes que não fecharam o tratamento no ato da avaliação?',
+                        labels: ['Nenhum controle', 'Total controle']
+                    },
+                    {
+                        text: 'De 0 a 10, quanto seus programas de fidelização tem ajudado a manter seus pacientes ativos e te indicando todos os meses?',
+                        labels: ['0', '10']
+                    },
+                    {
+                        text: 'Como você avalia sua capacidade de criar e executar campanhas internas com objetivos específicos de venda para gerar picos de vendas no mês?',
+                        labels: ['Baixa capacidade', 'Alta capacidade']
+                    }
+                ]
+            },
+            {
+                name: 'marketing',
+                label: 'Marketing e Vendas',
+                color: '#000000',
+                questions: [
+                    {
+                        text: 'Você já ficou sem postar por mais de uma semana porque não sabia o que publicar ou não se sentia confiante?',
+                        labels: ['Muitas vezes', 'Nunca']
+                    },
+                    {
+                        text: 'Como você avalia sua habilidade de destacar nas redes sociais e vender através dos seus conteúdos e posicionamento no IG?',
+                        labels: ['Pouca habilidade', 'Muita habilidade']
+                    },
+                    {
+                        text: 'O quanto você recebe pacientes novos todos os meses vindo através das suas redes sociais ou tráfego?',
+                        labels: ['Nunca', 'Sempre recebo']
+                    },
+                    {
+                        text: 'De 0 a 10, o quanto você se sente confortável em falar de valores com pacientes ou contornar bem as objeções do tipo "vou pensar" ou "muito caro"?',
+                        labels: ['0', '10']
+                    },
+                    {
+                        text: 'Como você avalia sua confiança para criar estratégias e um plano de ação personalizado para seu ano ou semestre?',
+                        labels: ['Não sinto confiança', 'Tenho muita confiança']
+                    }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let answers = {};
+        let radarChart;
+
+        // Flatten all questions for easier navigation
+        const allQuestions = [];
+        topics.forEach(topic => {
+            topic.questions.forEach((question, index) => {
+                allQuestions.push({
+                    topicName: topic.name,
+                    topicLabel: topic.label,
+                    topicColor: topic.color,
+                    questionIndex: index,
+                    text: question.text,
+                    labels: question.labels,
+                    id: `${topic.name}_${index}`
+                });
+            });
+        });
+
+        function getTopicFeedback(topicName, score, percentage) {
+            const feedbacks = {
+                'financas': {
+                    excellent: "🏆 Excelente! Seu consultório está operando com riscos financeiros baixos e boa previsibilidade. Continue monitorando e refinando suas métricas financeiras para manter essa estabilidade.",
+                    good: "💰 Você tem uma base financeira sólida! Para evoluir ainda mais, foque em aprimorar a previsibilidade de faturamento e revisar regularmente as margens de procedimentos.",
+                    improvement: "⚠️ Sua gestão financeira precisa de estruturação. Priorize a separação completa entre contas pessoais e profissionais, e desenvolva um controle rigoroso de custos e margens.",
+                    urgent: "🚨 Situação crítica: falta de reservas, margens indefinidas e divisão inadequada com parceiros. É urgente estruturar um controle financeiro profissional para garantir a sustentabilidade do negócio."
+                },
+                'equipe': {
+                    excellent: "⭐ Parabéns! Sua equipe está bem estruturada e engajada. Continue investindo no desenvolvimento da autonomia e criatividade da equipe para potencializar ainda mais os resultados.",
+                    good: "👥 Sua equipe tem boa funcionalidade! Para evoluir, trabalhe na criação de rotinas mais estruturadas e no desenvolvimento da proatividade dos colaboradores.",
+                    improvement: "📋 É necessário estruturar melhor sua equipe. Foque em criar rotinas claras, delegar com segurança e desenvolver sistemas que permitam maior autonomia operacional.",
+                    urgent: "🚨 Sua dependência operacional está comprometendo o crescimento. É fundamental implementar rotinas estruturadas, treinar a equipe adequadamente e desenvolver sistemas de delegação eficazes."
+                },
+                'processos': {
+                    excellent: "🎯 Excelente! Seus processos estão bem documentados e você tem boa autonomia. Continue refinando e automatizando processos para maximizar a eficiência operacional.",
+                    good: "⚙️ Você tem bons processos estabelecidos! Para evoluir, foque em melhorar os sistemas de reativação de pacientes e campanhas internas de vendas.",
+                    improvement: "📝 Seus processos precisam de mais estruturação. Priorize a documentação de rotinas, criação de sistemas de follow-up e programas de fidelização mais efetivos.",
+                    urgent: "⚠️ A falta de processos está limitando seu crescimento. É urgente documentar procedimentos, criar sistemas de backup para ausências e implementar estratégias de reativação de pacientes."
+                },
+                'marketing': {
+                    excellent: "🚀 Fantástico! Seu marketing está gerando resultados consistentes. Continue inovando e testando novas estratégias para manter o fluxo constante de pacientes.",
+                    good: "📱 Seu marketing está funcionando bem! Para potencializar, desenvolva um calendário editorial mais estratégico e aprimore suas técnicas de conversão.",
+                    improvement: "📈 Sua presença digital precisa ser fortalecida. Foque em criar conteúdo consistente, desenvolver estratégias de posicionamento e melhorar suas habilidades de vendas online.",
+                    urgent: "🚨 Sua captação de pacientes está comprometida. É fundamental desenvolver uma estratégia digital estruturada, criar conteúdo regular e treinar técnicas de vendas e objeções."
+                }
+            };
+
+            const topicFeedback = feedbacks[topicName];
+            if (!topicFeedback) return "Continue desenvolvendo esta área!";
+
+            if (percentage >= 80) return topicFeedback.excellent;
+            if (percentage >= 60) return topicFeedback.good;
+            if (percentage >= 40) return topicFeedback.improvement;
+            return topicFeedback.urgent;
+        }
+
+        function getFeedbackClass(percentage) {
+            if (percentage >= 80) return 'excellent';
+            if (percentage >= 60) return 'good';
+            if (percentage >= 40) return 'improvement';
+            return 'urgent';
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / allQuestions.length) * 100;
+            document.getElementById('progressFill').style.width = `${progress}%`;
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            document.getElementById('progressPercent').textContent = `${Math.round(progress)}%`;
+        }
+
+        function displayQuestion() {
+            const question = allQuestions[currentQuestionIndex];
+            
+            document.getElementById('topicIndicator').textContent = question.topicLabel;
+            document.getElementById('questionNumber').textContent = `Pergunta ${currentQuestionIndex + 1}/20`;
+            document.getElementById('questionText').textContent = question.text;
+            
+            // Update scale labels
+            const labels = document.querySelectorAll('.scale-labels span');
+            labels[0].textContent = question.labels[0];
+            labels[1].textContent = question.labels[1];
+            
+            // Clear previous selection
+            const radioButtons = document.querySelectorAll('input[name="currentAnswer"]');
+            radioButtons.forEach(radio => radio.checked = false);
+            
+            // Restore previous answer if exists
+            if (answers[question.id] !== undefined) {
+                document.getElementById(`answer${answers[question.id]}`).checked = true;
+            }
+            
+            updateNavigationButtons();
+            updateProgress();
+        }
+
+        function updateNavigationButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            // Show/hide previous button
+            if (currentQuestionIndex === 0) {
+                prevBtn.style.visibility = 'hidden';
+            } else {
+                prevBtn.style.visibility = 'visible';
+            }
+            
+            // Check if answer is selected
+            const selectedAnswer = document.querySelector('input[name="currentAnswer"]:checked');
+            nextBtn.disabled = !selectedAnswer;
+            
+            // Change button text for last question
+            if (currentQuestionIndex === allQuestions.length - 1) {
+                nextBtn.textContent = 'Ver Resultado';
+            } else {
+                nextBtn.textContent = 'Próxima';
+            }
+        }
+
+        function saveCurrentAnswer() {
+            const selectedAnswer = document.querySelector('input[name="currentAnswer"]:checked');
+            if (selectedAnswer) {
+                const question = allQuestions[currentQuestionIndex];
+                answers[question.id] = parseInt(selectedAnswer.value);
+            }
+        }
+
+        function nextQuestion() {
+            saveCurrentAnswer();
+            
+            if (currentQuestionIndex < allQuestions.length - 1) {
+                currentQuestionIndex++;
+                
+                // Add fade effect
+                const card = document.getElementById('questionCard');
+                card.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    displayQuestion();
+                    card.classList.remove('fade-out');
+                    card.classList.add('fade-in');
+                    
+                    setTimeout(() => {
+                        card.classList.remove('fade-in');
+                    }, 300);
+                }, 300);
+            } else {
+                // Show results
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                saveCurrentAnswer();
+                currentQuestionIndex--;
+                
+                // Add fade effect
+                const card = document.getElementById('questionCard');
+                card.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    displayQuestion();
+                    card.classList.remove('fade-out');
+                    card.classList.add('fade-in');
+                    
+                    setTimeout(() => {
+                        card.classList.remove('fade-in');
+                    }, 300);
+                }, 300);
+            }
+        }
+
+        function calculateResults() {
+            const topicResults = {};
+            let totalScore = 0;
+            let totalQuestions = 0;
+
+            topics.forEach(topic => {
+                let topicScore = 0;
+                let topicQuestions = 0;
+                
+                topic.questions.forEach((question, index) => {
+                    const questionId = `${topic.name}_${index}`;
+                    if (answers[questionId] !== undefined) {
+                        topicScore += answers[questionId];
+                        topicQuestions++;
+                    }
+                });
+                
+                const averageScore = topicQuestions > 0 ? topicScore / topicQuestions : 0;
+                topicResults[topic.name] = {
+                    score: averageScore,
+                    percentage: (averageScore / 10) * 100,
+                    label: topic.label,
+                    color: topic.color
+                };
+                
+                totalScore += topicScore;
+                totalQuestions += topicQuestions;
+            });
+
+            const overallAverage = totalQuestions > 0 ? totalScore / totalQuestions : 0;
+            const overallPercentage = (overallAverage / 10) * 100;
+
+            return {
+                individual: topicResults,
+                total: totalScore,
+                average: overallAverage,
+                percentage: overallPercentage
+            };
+        }
+
+        function getScoreLevel(percentage) {
+            if (percentage >= 80) return { 
+                level: 'Consultório Estruturado', 
+                message: 'Parabéns! Seu consultório já tem uma base sólida. A Mentoria ACME vai ajudar você a otimizar processos e alcançar a excelência operacional.' 
+            };
+            if (percentage >= 60) return { 
+                level: 'Consultório em Desenvolvimento', 
+                message: 'Você está no caminho certo! Há gaps importantes que a Mentoria ACME pode resolver para multiplicar seus resultados.' 
+            };
+            if (percentage >= 40) return { 
+                level: 'Consultório Iniciante', 
+                message: 'Há muito potencial de crescimento! A Mentoria ACME pode ser transformadora para estruturar todas as áreas do seu negócio.' 
+            };
+            return { 
+                level: 'Consultório Crítico', 
+                message: 'Situação que precisa de atenção urgente. A Mentoria ACME vai te dar toda a estrutura necessária para reverter esse quadro e prosperar.' 
+            };
+        }
+
+        function createRadarChart(results) {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            
+            if (radarChart) {
+                radarChart.destroy();
+            }
+
+            const labels = topics.map(topic => topic.label);
+            const dataPoints = topics.map(topic => results.individual[topic.name].score);
+            const idealPoints = new Array(topics.length).fill(10);
+
+            // Detectar se é mobile para ajustar configurações
+            const isMobile = window.innerWidth <= 768;
+            const pointLabelSize = isMobile ? 10 : 12;
+            const legendSize = isMobile ? 12 : 14;
+            const chartPadding = isMobile ? 25 : 35;
+
+            radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Seu Resultado Atual',
+                            data: dataPoints,
+                            borderColor: '#000000',
+                            backgroundColor: 'rgba(0, 0, 0, 0.15)',
+                            borderWidth: 4,
+                            pointBackgroundColor: '#000000',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 3,
+                            pointRadius: 8,
+                            tension: 0.2
+                        },
+                        {
+                            label: 'Resultado Ideal (Meta)',
+                            data: idealPoints,
+                            borderColor: '#888888',
+                            backgroundColor: 'rgba(136, 136, 136, 0.08)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#888888',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6,
+                            borderDash: [5, 5]
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    layout: {
+                        padding: {
+                            top: chartPadding,
+                            bottom: chartPadding,
+                            left: chartPadding,
+                            right: chartPadding
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#333333',
+                                font: {
+                                    size: legendSize,
+                                    weight: 'bold',
+                                    family: 'Inter'
+                                },
+                                padding: 20,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            },
+                            position: 'bottom'
+                        }
+                    },
+                    elements: {
+                        line: {
+                            borderWidth: 3
+                        },
+                        point: {
+                            radius: 6
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 10,
+                            min: 0,
+                            ticks: {
+                                stepSize: 2,
+                                color: '#666666',
+                                backdropColor: 'rgba(255, 255, 255, 0.9)',
+                                font: {
+                                    size: 11,
+                                    weight: 'bold'
+                                },
+                                showLabelBackdrop: true,
+                                backdropPadding: 4
+                            },
+                            grid: {
+                                color: 'rgba(51, 51, 51, 0.25)',
+                                lineWidth: 1,
+                                circular: true
+                            },
+                            angleLines: {
+                                color: 'rgba(51, 51, 51, 0.3)',
+                                lineWidth: 1
+                            },
+                            pointLabels: {
+                                color: '#333333',
+                                font: {
+                                    size: pointLabelSize,
+                                    weight: 'bold',
+                                    family: 'Inter'
+                                },
+                                padding: 20,
+                                callback: function(label) {
+                                    // Quebrar linha em labels muito longas para mobile
+                                    if (isMobile && label.length > 15) {
+                                        const words = label.split(' ');
+                                        if (words.length > 2) {
+                                            return [words.slice(0, 2).join(' '), words.slice(2).join(' ')];
+                                        }
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function displayDetailedResults(results) {
+            const container = document.getElementById('detailedResults');
+            container.innerHTML = '';
+
+            topics.forEach(topic => {
+                const result = results.individual[topic.name];
+                const gap = 10 - result.score;
+                const gapPercentage = (gap / 10) * 100;
+                const feedback = getTopicFeedback(topic.name, result.score, result.percentage);
+                const feedbackClass = getFeedbackClass(result.percentage);
+
+                const resultItem = document.createElement('div');
+                resultItem.className = 'result-item';
+                resultItem.innerHTML = `
+                    <div class="result-title">${result.label}</div>
+                    <div class="result-score">${result.score.toFixed(1)}/10 (${result.percentage.toFixed(0)}%)</div>
+                    <div class="result-bar">
+                        <div class="result-fill" style="width: ${result.percentage}%;"></div>
+                    </div>
+                    <div class="result-gap">
+                        Potencial de melhoria: ${gap.toFixed(1)} pontos (${gapPercentage.toFixed(0)}%)
+                    </div>
+                    <div class="result-feedback ${feedbackClass}">
+                        ${feedback}
+                    </div>
+                `;
+                container.appendChild(resultItem);
+            });
+        }
+
+        function showResults() {
+            const results = calculateResults();
+            const scoreInfo = getScoreLevel(results.percentage);
+
+            // Update score display
+            document.getElementById('totalScore').textContent = `${results.percentage.toFixed(0)}%`;
+            document.getElementById('scoreLevel').textContent = `${scoreInfo.level}`;
+            document.getElementById('scoreMessage').textContent = scoreInfo.message;
+
+            // Create radar chart
+            createRadarChart(results);
+
+            // Display detailed results
+            displayDetailedResults(results);
+
+            // Hide quiz and show results
+            document.getElementById('quizSection').style.display = 'none';
+            document.querySelector('.progress-section').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Event listeners
+        document.addEventListener('change', function(e) {
+            if (e.target.name === 'currentAnswer') {
+                updateNavigationButtons();
+            }
+        });
+
+        // Initialize
+        displayQuestion();
+    </script>
+</body>
+</html>
